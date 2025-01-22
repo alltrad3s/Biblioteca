@@ -1,0 +1,27 @@
+-- Modificar la base de datos
+CREATE DATABASE IF NOT EXISTS biblioteca;
+USE biblioteca;
+
+-- Tabla de libros con ISBN más largo
+CREATE TABLE IF NOT EXISTS libros (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    autor VARCHAR(255) NOT NULL,
+    categoria VARCHAR(100) NOT NULL,
+    isbn VARCHAR(20) NOT NULL,  -- Cambiado de 13 a 20 para mayor flexibilidad
+    disponible BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla de préstamos
+CREATE TABLE IF NOT EXISTS prestamos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    libro_id INT NOT NULL,
+    usuario_id INT NOT NULL DEFAULT 1,
+    fecha_prestamo DATETIME NOT NULL,
+    fecha_devolucion DATETIME NOT NULL,
+    estado ENUM('activo', 'devuelto') DEFAULT 'activo',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (libro_id) REFERENCES libros(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
